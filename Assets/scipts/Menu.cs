@@ -5,17 +5,19 @@ using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class Menu  : MonoBehaviourPunCallbacks
+public class Menu : MonoBehaviourPunCallbacks
 {
     // Start is called before the first frame update
-    public GameObject WPanel,PlayerSelectionPanel,PlayerObjects,player;
+    public GameObject WPanel, PlayerSelectionPanel, PlayerObjects, player;
     public static int sceneNum;
-
+    public GameObject[] players;
     public static int PlayerNum;
+    public int playerselectiontemp;
     void Start()
     {
         PhotonNetwork.GameVersion = "0.1";
         PhotonNetwork.ConnectUsingSettings();
+        selectcharector();
     }
 
     // Update is called once per frame
@@ -63,16 +65,16 @@ public class Menu  : MonoBehaviourPunCallbacks
     {
         roomname = Random.Range(10000, 99999);
 
-            PhotonNetwork.CreateRoom(roomname.ToString());
+        PhotonNetwork.CreateRoom(roomname.ToString());
     }
     public override void OnJoinedRoom()
     {
         Debug.Log("room joined " + PhotonNetwork.CurrentRoom.Name);
         WPanel.SetActive(true);
-     //   PhotonNetwork.Instantiate(player.name, Vector3.zero, Quaternion.identity);
-     if(PhotonNetwork.IsMasterClient)
-        SceneManager.LoadScene(sceneNum);
-     else
+        //   PhotonNetwork.Instantiate(player.name, Vector3.zero, Quaternion.identity);
+        if (PhotonNetwork.IsMasterClient)
+            SceneManager.LoadSceneAsync(sceneNum);
+        else
             WPanel.SetActive(true);
         //PhotonNetwork.LoadLevel()
     }
@@ -97,11 +99,48 @@ public class Menu  : MonoBehaviourPunCallbacks
 
     // void up
 
-    public void PlayerSelectionFun(int x)
+    public void PlayerSelectionFun()
     {
-        PlayerNum = x;
+        PlayerNum = playerselectiontemp+1;
         PlayerSelectionPanel.SetActive(false);
         PlayerObjects.SetActive(false);
     }
 
+    public void selectcharector()
+    {
+        for(int i=0;i<6;i++)
+        {
+            if(i==playerselectiontemp)
+            {
+                players[i].SetActive(true);
+            }
+            else
+            {
+                players[i].SetActive(false);
+            }
+        }
+    }
+
+    public void increase()
+    {
+        playerselectiontemp++;
+        if(playerselectiontemp>5)
+        {
+            playerselectiontemp = 0;
+        }
+        selectcharector();
+    }
+    public void decrese()
+    {
+        playerselectiontemp--;
+        if (playerselectiontemp <0)
+        {
+            playerselectiontemp = 5;
+        }
+        selectcharector();
+    }
+    public void select()
+    {
+    }
 }
+
