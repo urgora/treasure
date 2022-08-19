@@ -10,7 +10,7 @@ public class PlayerMovement  : MonoBehaviourPunCallbacks
 
     // public CharacterController cc;
     public Rigidbody rb;
-    public float speed,camspeed;
+    public float movespeed,camspeed,turnspeed;
     public GameObject anim;
     public GameObject SelfCam, Canvas, SentButton,MsgCanvas,Player,camrotateobject,camparent;
     public Text MsgText, Msgreceiver,camtester;
@@ -77,14 +77,15 @@ public class PlayerMovement  : MonoBehaviourPunCallbacks
     {
         if (pv.IsMine)
         {
-            horizontal =  speed * Time.deltaTime* buttonhorizontal;
-            vertical =  speed * Time.deltaTime* buttonvertical;
+            horizontal =  turnspeed * Time.deltaTime* buttonhorizontal;
+            vertical =  movespeed*Time.deltaTime* buttonvertical;
 
             //   cc.Move(transform.forward * forBack);
             transform.Rotate(Vector3.up * horizontal*20);
-            Vector3 positiontomove = transform.position + transform.forward * vertical;
-            rb.MovePosition(positiontomove);
-           // transform.position += transform.forward * vertical;
+            Vector3 positiontomove = transform.forward * vertical;
+           // rb.MovePosition(transform.position+positiontomove * Time.deltaTime*movespeed);
+            
+            transform.position += transform.forward * vertical;
           //  cc.Move(transform.forward * vertical);
             //  PlayersObj[Menu.PlayerNum - 1].GetComponent<Animator>().SetFloat("Blend", buttonvertical);
           an.SetFloat("Blend", buttonvertical);
@@ -206,11 +207,11 @@ public class PlayerMovement  : MonoBehaviourPunCallbacks
     }
     public void sprinton()
     {
-        buttonvertical = 2;
+        buttonvertical = buttonvertical+2;
     }
     public void sprintoff()
     {
-        buttonvertical = 0;
+        buttonvertical = buttonvertical -2;
     }
     #endregion
 
