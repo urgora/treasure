@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: d20751b061f3e7846a92b7b5902d9150
 ModelImporter:
-  serializedVersion: 21300
+  serializedVersion: 20200
   internalIDToNameTable:
   - first:
       1: 100000
@@ -92,7 +92,6 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
-    removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -122,7 +121,6 @@ ModelImporter:
     importBlendShapes: 0
     importCameras: 0
     importLights: 0
-    nodeNameCollisionStrategy: 0
     fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 1
@@ -134,7 +132,6 @@ ModelImporter:
     skinWeightsMode: 0
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
-    optimizeBones: 1
     meshOptimizationFlags: 1
     indexFormat: 1
     secondaryUVAngleDistortion: 8
@@ -177,7 +174,6 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 0
   addHumanoidExtraRootOnlyWhenUsingAvatar: 0
-  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 

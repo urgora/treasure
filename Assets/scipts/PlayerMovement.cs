@@ -30,7 +30,7 @@ public class PlayerMovement  : MonoBehaviourPunCallbacks
     {
         camerachange();
         pv = GetComponent<PhotonView>();
-
+        rb = GetComponent<Rigidbody>();
         if(photonView.IsMine)
         {
             pv.RPC("selectedcharector", RpcTarget.AllBuffered, Menu.PlayerNum-1);
@@ -82,10 +82,13 @@ public class PlayerMovement  : MonoBehaviourPunCallbacks
 
             //   cc.Move(transform.forward * forBack);
             transform.Rotate(Vector3.up * horizontal*20);
-            transform.position += transform.forward * vertical;
+            Vector3 positiontomove = transform.position + transform.forward * vertical;
+            rb.MovePosition(positiontomove);
+           // transform.position += transform.forward * vertical;
           //  cc.Move(transform.forward * vertical);
             //  PlayersObj[Menu.PlayerNum - 1].GetComponent<Animator>().SetFloat("Blend", buttonvertical);
           an.SetFloat("Blend", buttonvertical);
+            
             // if(buttonvertical!=0)
             // PlayersObj[Menu.PlayerNum - 1].GetComponent<animationtransfer>().animationsync(buttonvertical);
 
