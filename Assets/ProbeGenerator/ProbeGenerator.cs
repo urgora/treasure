@@ -317,7 +317,7 @@ namespace ycdivfx.ProbeGenerator
 #endif
             }
 
-            _probes.probePositions = !Refine ? initialPoints.ToArray() : points.ToArray();
+           // _probes.probePositions = !Refine ? initialPoints.ToArray() : points.ToArray();
 
             tm.Stop();
             GenerationTime = tm.ElapsedMilliseconds;
