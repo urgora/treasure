@@ -80,7 +80,7 @@ namespace ycdivfx.ProbeGenerator.Generators
                     }
                 }
             }
-          //  Debug.LogFormat("Progress: {0}, Total: {1}", progress, total);
+            Debug.LogFormat("Progress: {0}, Total: {1}", progress, total);
             End:
 #if UNITY_EDITOR
             UnityEditor.EditorUtility.ClearProgressBar();
