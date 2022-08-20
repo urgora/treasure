@@ -14,9 +14,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         public bool m_Jump;                      // the world-relative desired move direction, calculated from the camForward and user input.
         public float horizontal;
         public float vertical;
+     
 
 
-        
         private void Start()
         {
             // get the transform of the main camera
@@ -40,18 +40,18 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         {
             if (!m_Jump)
             {
-                m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
+             //   m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
             }
         }
 
-
+       public bool crouch;
         // Fixed update is called in sync with physics
         private void FixedUpdate()
         {
             // read inputs
            // float h = CrossPlatformInputManager.GetAxis("Horizontal");
            // float v = CrossPlatformInputManager.GetAxis("Vertical");
-            bool crouch = Input.GetKey(KeyCode.C);
+           crouch  = Input.GetKey(KeyCode.C);
 
             // calculate move direction to pass to character
             if (m_Cam != null)
@@ -72,6 +72,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
             // pass all parameters to the character control script
             m_Character.Move(m_Move, crouch, m_Jump);
+           
             m_Jump = false;
         }
     }

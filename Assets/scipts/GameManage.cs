@@ -16,7 +16,7 @@ public class GameManage :  MonoBehaviourPunCallbacks
     }
     void SpawnPlayer()
     {
-        Camera.SetActive(false);
+      //  Camera.SetActive(false);
 
         int x = Random.Range(0, spawnposition.Count);
         PhotonNetwork.Instantiate(Pname.name, spawnposition[x].position, spawnposition[x].rotation);

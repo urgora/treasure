@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
-
+using UnityStandardAssets.Characters.ThirdPerson;
 public class PlayerMovement  : MonoBehaviourPunCallbacks
 {
     // Start is called before the first frame update
@@ -21,6 +21,18 @@ public class PlayerMovement  : MonoBehaviourPunCallbacks
     public float jumspeed,jumptime;
     Animator an;
     public bool jumped,increasecamera,decreasecamer,changecamparent;
+
+
+    public FixedJoystick joy;
+    public FixedTouchField camerajoy;
+    public ThirdPersonUserControl controller;
+    public FixedButton jumpbt;
+    public float x;
+    public float camerangle;
+    public float cameranglespeed = 2f;
+    public GameObject maincamera;
+
+
     private void Awake()
     {
        // PlayersObj[Menu.PlayerNum - 1].SetActive(true);
@@ -28,12 +40,14 @@ public class PlayerMovement  : MonoBehaviourPunCallbacks
     
     void Start()
     {
-        camerachange();
+       // camerachange();
         pv = GetComponent<PhotonView>();
         rb = GetComponent<Rigidbody>();
         if(photonView.IsMine)
         {
             pv.RPC("selectedcharector", RpcTarget.AllBuffered, Menu.PlayerNum-1);
+            maincamera = Camera.main.gameObject;
+            controller = GetComponent<ThirdPersonUserControl>();
         }
     }
     [PunRPC]
@@ -77,38 +91,38 @@ public class PlayerMovement  : MonoBehaviourPunCallbacks
     {
         if (pv.IsMine)
         {
-          //  horizontal =  turnspeed * Time.deltaTime* buttonhorizontal;
-          //  vertical =  movespeed*Time.deltaTime* buttonvertical;
+            //  horizontal =  turnspeed * Time.deltaTime* buttonhorizontal;
+            //  vertical =  movespeed*Time.deltaTime* buttonvertical;
 
-          //  //   cc.Move(transform.forward * forBack);
-          //  transform.Rotate(Vector3.up * horizontal*20);
-          //  Vector3 positiontomove = transform.forward * vertical;
-          // // rb.MovePosition(transform.position+positiontomove * Time.deltaTime*movespeed);
-            
-          //  transform.position += transform.forward * vertical;
-          ////  cc.Move(transform.forward * vertical);
-          //  //  PlayersObj[Menu.PlayerNum - 1].GetComponent<Animator>().SetFloat("Blend", buttonvertical);
-          //an.SetFloat("Blend", buttonvertical);
-            
-          //  // if(buttonvertical!=0)
-          //  // PlayersObj[Menu.PlayerNum - 1].GetComponent<animationtransfer>().animationsync(buttonvertical);
+            //  //   cc.Move(transform.forward * forBack);
+            //  transform.Rotate(Vector3.up * horizontal*20);
+            //  Vector3 positiontomove = transform.forward * vertical;
+            // // rb.MovePosition(transform.position+positiontomove * Time.deltaTime*movespeed);
 
+            //  transform.position += transform.forward * vertical;
+            ////  cc.Move(transform.forward * vertical);
+            //  //  PlayersObj[Menu.PlayerNum - 1].GetComponent<Animator>().SetFloat("Blend", buttonvertical);
+            //an.SetFloat("Blend", buttonvertical);
 
-            
-          //  if(increasecamera)
-          //  {
-          //      camangle += camspeed * Time.deltaTime;
-          //      camangle = Mathf.Clamp(camangle, -30, 30);
-          //      camrotateobject.transform.localRotation = Quaternion.Euler(camangle, camrotateobject.transform.rotation.y, camrotateobject.transform.rotation.z);
-          //  }
-          //  if (decreasecamer)
-          //  {
-          //      camangle -= camspeed * Time.deltaTime;
-          //     camangle= Mathf.Clamp(camangle, -30, 30);
-          //      camrotateobject.transform.localRotation = Quaternion.Euler(camangle, camrotateobject.transform.rotation.y, camrotateobject.transform.rotation.z);
-          //  }
+            //  // if(buttonvertical!=0)
+            //  // PlayersObj[Menu.PlayerNum - 1].GetComponent<animationtransfer>().animationsync(buttonvertical);
 
 
+
+            //  if(increasecamera)
+            //  {
+            //      camangle += camspeed * Time.deltaTime;
+            //      camangle = Mathf.Clamp(camangle, -30, 30);
+            //      camrotateobject.transform.localRotation = Quaternion.Euler(camangle, camrotateobject.transform.rotation.y, camrotateobject.transform.rotation.z);
+            //  }
+            //  if (decreasecamer)
+            //  {
+            //      camangle -= camspeed * Time.deltaTime;
+            //     camangle= Mathf.Clamp(camangle, -30, 30);
+            //      camrotateobject.transform.localRotation = Quaternion.Euler(camangle, camrotateobject.transform.rotation.y, camrotateobject.transform.rotation.z);
+            //  }
+
+            movement();
 
         }
         else
@@ -119,7 +133,25 @@ public class PlayerMovement  : MonoBehaviourPunCallbacks
     }
     public void movement()
     {
+        controller.m_Jump = jumpbt.Pressed;
+        controller.horizontal = joy.Horizontal;
+        controller.vertical = joy.Vertical;
+        Vector2 y = new Vector2(joy.Horizontal, joy.Vertical);
+        x = y.magnitude;
 
+        camerangle += camerajoy.TouchDist.x * cameranglespeed;
+
+        maincamera.transform.position = transform.position + Quaternion.AngleAxis(camerangle, Vector3.up) * new Vector3(0, 3, 4);
+        maincamera.transform.rotation = Quaternion.LookRotation(transform.position + Vector3.up * 2f - maincamera.transform.position, Vector3.up);
+
+        if (x > .1)
+        {
+            an.SetFloat("Blend", 1);
+        }
+        else
+        {
+            an.SetFloat("Blend", 0);
+        }
     }
 
 
