@@ -13,11 +13,13 @@ public class Menu : MonoBehaviourPunCallbacks
     public GameObject[] players;
     public static int PlayerNum;
     public int playerselectiontemp;
+    public string[] roomnames;
     void Start()
     {
         PhotonNetwork.GameVersion = "0.1";
         PhotonNetwork.ConnectUsingSettings();
         selectcharector();
+
     }
 
     // Update is called once per frame
@@ -61,11 +63,12 @@ public class Menu : MonoBehaviourPunCallbacks
         Debug.Log("room created " + PhotonNetwork.CurrentRoom.Name);
     }
     public int roomname;
-    public void CreateRoomFun()
+    public void CreateRoomFun(int x)
     {
-        roomname = Random.Range(10000, 99999);
+      //  roomname = Random.Range(10000, 99999);
+    
 
-        PhotonNetwork.CreateRoom(roomname.ToString());
+        PhotonNetwork.CreateRoom(roomnames[x]);
     }
     public override void OnJoinedRoom()
     {
@@ -86,14 +89,19 @@ public class Menu : MonoBehaviourPunCallbacks
 
         if (returnCode == 32760)
         {
-            CreateRoomFun();
+            CreateRoomFun(sceneNum-1);
         }
     }
 
     public void JoinRoomFun(int x)
     {
-        PhotonNetwork.JoinRandomRoom();
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.IsVisible = true;
+      
+        PhotonNetwork.JoinOrCreateRoom(roomnames[x-1], roomOptions, TypedLobby.Default);
+
         sceneNum = x;
+       
     }
 
 
@@ -142,5 +150,6 @@ public class Menu : MonoBehaviourPunCallbacks
     public void select()
     {
     }
+ 
 }
 

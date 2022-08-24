@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
+using Photon.Voice.Unity;
+using Photon.Voice.PUN;
 public class GameManage :  MonoBehaviourPunCallbacks
 {
     // Start is called before the first frame update
     public GameObject Pname;
-    public GameObject Camera;
-
+    public GameObject canvas;
+    public GameObject voice;
     public List<Transform> spawnposition;
     void Start()
     {
-        Invoke("SpawnPlayer", 2);
+        Invoke("SpawnPlayer", .5f);
+    
     }
     void SpawnPlayer()
     {
-      //  Camera.SetActive(false);
+        Invoke("disableloading", 1);
 
         int x = Random.Range(0, spawnposition.Count);
         PhotonNetwork.Instantiate(Pname.name, spawnposition[x].position, spawnposition[x].rotation);
@@ -30,14 +33,33 @@ public class GameManage :  MonoBehaviourPunCallbacks
         //    PhotonNetwork.Instantiate(Pname.name, new Vector3(Random.Range(20, 50),1,-10), Quaternion.Euler(0,90,0));
     }
     // Update is called once per frame
-    void Update()
+    public void disableloading()
     {
-        
+        canvas.SetActive(false);
+     //   Camera.main.gameObject.SetActive(false);
     }
     public void home()
     {
+       // Destroy(PhotonVoiceNetwork.Instance);
         PhotonNetwork.LeaveRoom();
         PhotonNetwork.Disconnect();
         SceneManager.LoadScene(0);
     }
+
+    public Recorder voicerecorder;
+
+
+
+    public void cantalk()
+    {
+       // voicerecorder.TransmitEnabled = true;
+        PhotonVoiceNetwork.Instance.PrimaryRecorder.TransmitEnabled = true;
+    }
+    public void cannottalk()
+    {
+        //voicerecorder.TransmitEnabled = false;
+        PhotonVoiceNetwork.Instance.PrimaryRecorder.TransmitEnabled = false;
+    }
+
+
 }

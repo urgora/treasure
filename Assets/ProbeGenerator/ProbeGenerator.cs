@@ -316,8 +316,9 @@ namespace ycdivfx.ProbeGenerator
                 UnityEditor.EditorUtility.ClearProgressBar();
 #endif
             }
-
+#if UNITY_EDITOR
             _probes.probePositions = !Refine ? initialPoints.ToArray() : points.ToArray();
+#endif
 
             tm.Stop();
             GenerationTime = tm.ElapsedMilliseconds;

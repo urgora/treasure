@@ -7,7 +7,7 @@ using UnityStandardAssets.Characters.ThirdPerson;
 public class thirdpersoncontroller : MonoBehaviour
 {
     public FixedJoystick joy;
-    public FixedTouchField camerajoy;
+    public FixedJoystick camerajoy;
     public ThirdPersonUserControl controller;
     public  ThirdPersonCharacter forjump;
     public FixedButton jumpbt;
@@ -26,7 +26,10 @@ public class thirdpersoncontroller : MonoBehaviour
     public float jumspeed, jumptime;
     Animator an;
     public bool jumped, increasecamera, decreasecamer, changecamparent;
-
+    public Toggle voicetoggle;
+    GameManage gm;
+    public Image mic;
+    public Sprite micon,micoff;
 
     private void Start()
     {
@@ -37,6 +40,8 @@ public class thirdpersoncontroller : MonoBehaviour
             pv.RPC("selectedcharector", RpcTarget.AllBuffered, Menu.PlayerNum - 1);
             maincamera = Camera.main.gameObject;
             controller = GetComponent<ThirdPersonUserControl>();
+            gm = FindObjectOfType<GameManage>();
+            playercanspeak();
         }
         else
         {
@@ -92,17 +97,33 @@ public class thirdpersoncontroller : MonoBehaviour
             }
             controller.horizontal = joy.Horizontal;
             controller.vertical = joy.Vertical;
+            if(joy.Vertical>.95f)
+            {
+                controller.m_Character.m_MoveSpeedMultiplier = 2f;
+            }
+            else
+            {
+                controller.m_Character.m_MoveSpeedMultiplier = 1.3f;
+            }
             Vector2 y = new Vector2(joy.Horizontal, joy.Vertical);
             x = y.magnitude;
 
-            camerangle += camerajoy.TouchDist.x * cameranglespeed;
+            camerangle += camerajoy.Horizontal * cameranglespeed;
 
             maincamera.transform.position = transform.position + Quaternion.AngleAxis(camerangle, Vector3.up) * new Vector3(0, 2, 3);
             maincamera.transform.rotation = Quaternion.LookRotation(transform.position + Vector3.up * 1.4f - maincamera.transform.position, Vector3.up);
 
             if (x > .1)
             {
-                an.SetFloat("Blend", 1);
+                if(x>.95f)
+                {
+                    an.SetFloat("Blend", 2);
+                }
+                else
+                {
+                    an.SetFloat("Blend", 1);
+                }
+                
             }
             else
             {
@@ -110,5 +131,18 @@ public class thirdpersoncontroller : MonoBehaviour
             }
         }
   
+    }
+    public void playercanspeak()
+    {
+        if (voicetoggle.isOn)
+        {
+            gm.cantalk();
+            mic.sprite = micon;
+        }
+        else
+        {
+            gm.cannottalk();
+            mic.sprite = micoff;
+        }
     }
 }

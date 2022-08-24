@@ -21,6 +21,9 @@ public class PlayerMovement  : MonoBehaviourPunCallbacks
     public float jumspeed,jumptime;
     Animator an;
     public bool jumped,increasecamera,decreasecamer,changecamparent;
+    public Toggle voicetoggle;
+    GameManage gm;
+
 
 
     public FixedJoystick joy;
@@ -48,6 +51,8 @@ public class PlayerMovement  : MonoBehaviourPunCallbacks
             pv.RPC("selectedcharector", RpcTarget.AllBuffered, Menu.PlayerNum-1);
             maincamera = Camera.main.gameObject;
             controller = GetComponent<ThirdPersonUserControl>();
+            gm = FindObjectOfType<GameManage>();
+            playercanspeak();
         }
     }
     [PunRPC]
@@ -253,6 +258,16 @@ public class PlayerMovement  : MonoBehaviourPunCallbacks
     }
     #endregion
 
-
+    public void playercanspeak()
+    {
+        if (voicetoggle.isOn)
+        {
+            gm.cantalk();
+        }
+        else
+        {
+            gm.cannottalk();
+        }
+    }
 
 }
